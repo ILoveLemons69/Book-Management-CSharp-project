@@ -7,4 +7,14 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <None Remove="Saved Files\SavedBooks.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Saved Files\SavedBooks.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
 </Project>

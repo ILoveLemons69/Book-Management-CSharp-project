@@ -33,30 +33,12 @@ namespace ConsoleApp1.Models
         {
             IdCounter++;
             Id = IdCounter;
+
             Title = title;
             AuthorName = authorName;
             ReleaseDate = releaseDate;
 
             BookManager.BooksList.Add(Id, this);
-        }
-        // კონსტრუქტორი რომელიც ქმნის და ამატებს ობიექტს შესანახ ფაილში
-        public Books(string title, string authorName, DateTime releaseDate, bool saving)
-        {
-            IdCounter++;
-            Id = IdCounter;
-            Title = title;
-            AuthorName = authorName;
-            ReleaseDate = releaseDate;
-
-            BookManager.BooksList.Add(Id, this);
-
-            if (saving)
-            {
-                using (StreamWriter writer = new StreamWriter("C:\\Users\\PC\\Desktop\\ConsoleApp1\\ConsoleApp1\\Saved Files\\SavedBooks.txt", true))
-                {
-                    writer.WriteLine($"{'"' + title + '"'}, {'"' + authorName + '"'}, {'"' + releaseDate.ToString("yyyy/MM/dd", CultureInfo.InvariantCulture) + '"'}");
-                }
-            }
         }
 
         // ობიექტის ინფორმაციის სტრინგი

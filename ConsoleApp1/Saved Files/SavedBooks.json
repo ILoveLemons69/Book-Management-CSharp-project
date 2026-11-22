@@ -1,0 +1,30 @@
+{
+  "1": {
+    "Id": 1,
+    "Title": "Berserk deluxe edition",
+    "AuthorName": "Kentaro Miura",
+    "ReleaseDate": "2023-11-21T00:00:00",
+    "Saving": true
+  },
+  "2": {
+    "Id": 2,
+    "Title": "Minecraft: The Complete Handbook Collection",
+    "AuthorName": "Mojang",
+    "ReleaseDate": "2014-01-01T00:00:00",
+    "Saving": true
+  },
+  "3": {
+    "Id": 3,
+    "Title": "One Million Digits Of Pi",
+    "AuthorName": "Socrates Co.",
+    "ReleaseDate": "2020-04-30T00:00:00",
+    "Saving": true
+  },
+  "4": {
+    "Id": 4,
+    "Title": "Crime and Punishment (For Your Cat)",
+    "AuthorName": "Fyodor Dostoevsky",
+    "ReleaseDate": "2023-07-05T00:00:00",
+    "Saving": true
+  }
+}

@@ -1,4 +1,5 @@
-﻿using System.Globalization;
+﻿using ConsoleApp1.Helpers;
+using System.Globalization;
 
 namespace ConsoleApp1.Models
 {
@@ -7,7 +8,13 @@ namespace ConsoleApp1.Models
 
         // BooksList-ი ინახავს ყველა Books-ის ობიექტს
         public static SortedList<int, Books> BooksList = new SortedList<int, Books>();
-        public static string Path = "C:\\Users\\student\\Downloads\\Book-Management-CSharp-project-main\\ConsoleApp1\\ConsoleApp1\\Saved Files\\SavedBooks.txt";
+        public static JsonHelper jsonHelper = new JsonHelper();
+        public static string ProjectPath = System.IO.Path.Combine(
+            AppContext.BaseDirectory,
+            "..", "..", "..",
+            "Saved Files",
+            "SavedBooks.json"
+        );
 
         // კონსოლში გამოაქვს ყველა Books.ToString-ი
         public static void ShowBooks()
@@ -58,44 +65,29 @@ namespace ConsoleApp1.Models
 
 
         // ამით მომხმარებელი შლის ობიექტებს BooksList-იდან და SavedBooks.txt-იდან
-        public async static Task DeleteBooks(int lineIndexToRemove)
+
+        public static async Task DeleteBooks(int id)
         {
-            try
+            bool deleted = await jsonHelper.DeleteBook(BooksList, id);
+
+            if (deleted)
             {
-                var lines = File.ReadAllLines(Path).ToList();
-
-                if (lines.Count > lineIndexToRemove - 1)
-                {
-                    lines.RemoveAt(lineIndexToRemove - 1);
-
-                    File.WriteAllLines(Path, lines);
-
-                    Console.WriteLine($"\n[{BooksList[lineIndexToRemove].Id}] {BooksList[lineIndexToRemove].Title} - {BooksList[lineIndexToRemove].AuthorName}, released in {BooksList[lineIndexToRemove].ReleaseDate.ToString("yyyy/MM/dd")}");
-                    BooksList.Clear();
-                    Books.IdCounter = 0;
-                    await ReadFromFile();
-                    Console.ForegroundColor = ConsoleColor.Green;
-                    Console.WriteLine("\nThe chosen BOOK was DELETED Successfully\n");
-                    Console.ForegroundColor = ConsoleColor.White;
-                }
-                else
-                {
-                    Console.ForegroundColor = ConsoleColor.Red;
-                    Console.WriteLine("\nThe file does not contain what you are trying to delete.\n");
-                    Console.ForegroundColor = ConsoleColor.White;
-                }
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.WriteLine("\nBook deleted successfully!\n");
             }
-            catch (IOException ex)
+            else
             {
                 Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine($"An error occurred while handling the file: {ex.Message}");
-                Console.ForegroundColor = ConsoleColor.White;
+                Console.WriteLine("\nBook with this ID was not found!\n");
             }
+
+            Console.ForegroundColor = ConsoleColor.White;
         }
+
         //file-ის წამკითხველი გამოიყენება ამ კლასში დამხმარე მეთოდად რომ გავასწოროდ თან მიმდევრობა და აიდი წიგნების წაშლისას.
         public async static Task ReadFromFile()
         {
-            string[] lines = File.ReadAllLines(Path);
+            string[] lines = File.ReadAllLines(ProjectPath);
 
             foreach (string line in lines)
             {
@@ -116,5 +108,39 @@ namespace ConsoleApp1.Models
                 Books book = new Books(title, author, date);
             }
         }
+
+        public static async Task ClearBooks()
+        {
+            await jsonHelper.ClearFile();
+
+            BooksList.Clear();
+
+            Books.IdCounter = 0;
+
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine("\nAll books have been deleted successfully!\n");
+            Console.ForegroundColor = ConsoleColor.White;
+        }
+
+        public static async Task UpdateBook(int id, string? title,
+            string? authorName, DateTime? releaseDate)
+        {
+            bool updated = await jsonHelper.UpdateBook(BooksList, id, title,
+                authorName, releaseDate);
+
+            if (updated)
+            {
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.WriteLine("\nBook updated successfully!\n");
+            }
+            else
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("\nBook with this ID was not found!\n");
+            }
+
+            Console.ForegroundColor = ConsoleColor.White;
+        }
+
     }
 }
